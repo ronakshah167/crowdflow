@@ -41,15 +41,16 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/server ./server
+COPY --from=builder --chown=nextjs:nodejs /app/start.sh ./start.sh
+RUN chmod +x ./start.sh
 
-# Expose the port the app runs on
+# Expose the ports
 EXPOSE 3000
+EXPOSE 3001
 
 ENV PORT 3000
-# set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-# Use a custom start script to run both Next.js and the Socket.io server
 USER nextjs
 
-CMD ["node", "server.js"]
+CMD ["./start.sh"]
